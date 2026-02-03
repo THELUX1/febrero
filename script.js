@@ -42,7 +42,7 @@ const songConfig = {
         [29, "Pero es tan bueno"],
         [31, "Nunca he soñado con nadie como tú"],
         [36, "Y he oído hablar de un amor que llega una vez en la vida."],
-        [43, "Y estoy bastante seguro de que tú eres ese amor mío 💗."],
+        [43, "Y estoy bastante segura de que tú eres ese amor mío 💗."],
         [48, "Porque estoy en un campo de dientes de león."],
         [52, "Deseando a todos que seas mío, mío."],
         [61, "Y veo la eternidad en tus ojos"],
@@ -55,8 +55,8 @@ const songConfig = {
         [97, "Cuando me miras"],
         [99, "Nunca me he sentido tan viva y libre."],
         [103, "Cuando me miras"],
-        [105, "Nunca me eh sentido tan felíz"],
-        [110, "Y eh oído hablar de un amor que llega una vez en la vida."],
+        [105, "Nunca me he sentido tan felíz"],
+        [110, "Y he oído hablar de un amor que llega una vez en la vida."],
         [116, "Y estoy bastante segura de que tú eres ese amor mío 💗"],
         [122, "Porque estoy en un campo de dientes de león."],
         [126, "Deseando a todos que seas mío, mío."],
@@ -92,8 +92,8 @@ const photos = [
         url: "assets/images/foto1.jpg"
     },
     {
-        title: "Risas Compartidas",
-        caption: "Esos momentos donde la risa fluye naturalmente y el tiempo parece detenerse.",
+        title: "Sonrisas Compartidas",
+        caption: "Esos momentos donde nuestras sonrisas fluyen naturalmente y el tiempo parece detenerse.",
         url: "assets/images/foto2.jpg"
     },
     {
@@ -106,7 +106,7 @@ const photos = [
         caption: "Esas miradas que dicen más que mil palabras, esos gestos que lo significan todo.",
         url: "assets/images/foto4.jpg"
     }
-    // Agrega más fotos según necesites
+ 
 ];
 
 // Variables de estado
@@ -198,11 +198,11 @@ function createLyricHeartsOptimized() {
     heartsContainer.innerHTML = '';
     
     // Crear corazones que explotan desde diferentes direcciones
-    const heartCount = 4; // Menos corazones pero mejor posicionados
+    const heartCount = 8; // Menos corazones pero mejor posicionados
     
     for (let i = 0; i < heartCount; i++) {
         setTimeout(() => {
-            const heartType = Math.floor(Math.random() * 4);
+            const heartType = Math.floor(Math.random() * 8);
             let heartClass, startPosition;
             
             switch(heartType) {
@@ -224,14 +224,14 @@ function createLyricHeartsOptimized() {
                     heartClass = 'heart-lyric-top';
                     startPosition = {
                         left: `${20 + Math.random() * 60}%`,
-                        top: '20%'
+                        top: '10%'
                     };
                     break;
                 case 3: // Abajo
                     heartClass = 'heart-lyric-bottom';
                     startPosition = {
                         left: `${20 + Math.random() * 60}%`,
-                        bottom: '20%'
+                        bottom: '10%'
                     };
                     break;
             }
@@ -325,13 +325,13 @@ function createPhotoHeartsOptimized() {
 }
 
 // ============================================
-// FUNCIONES PRINCIPALES (MODIFICADAS)
+// FUNCIONES PRINCIPALES
 // ============================================
 
 function initConfig() {
     songTitle.textContent = songConfig.title;
     songArtist.textContent = songConfig.artist;
-    createFloatingHeartsSystem();
+    // createFloatingHeartsSystem(); // desactivado: sin corazones desde arriba
 }
 
 function togglePlay() {
@@ -485,34 +485,51 @@ function showPhoto(index, animationClass = 'fade-in') {
     const direction = index > currentPhotoIndex ? 'next' : 'prev';
     lastDirection = direction;
     
+    // Actualizar índice actual
     currentPhotoIndex = index;
+    
+    // Actualizar contador
     currentPhotoEl.textContent = index + 1;
     
+    // Actualizar puntos de navegación
     document.querySelectorAll('.photo-dot').forEach((dot, i) => {
         dot.classList.toggle('active', i === index);
     });
     
+    // Determinar clase de animación si no se especifica
     if (animationClass === 'fade-in') {
         animationClass = direction === 'next' ? 'slide-left' : 'slide-right';
     }
     
+    // Crear elemento de imagen
     const img = new Image();
     img.src = photo.url;
     img.alt = photo.title;
     img.className = animationClass;
     
+    // Manejar error de carga de imagen
     img.onerror = function() {
         console.error(`No se pudo cargar la imagen: ${photo.url}`);
         this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect width="400" height="300" fill="%231a1a2e"/><text x="200" y="150" font-family="Arial" font-size="20" fill="%23ff4081" text-anchor="middle">Imagen no encontrada</text></svg>';
     };
     
+    // Limpiar display y agregar nueva imagen
+    const photoDisplay = document.getElementById('photoDisplay');
     photoDisplay.innerHTML = '';
     photoDisplay.appendChild(img);
     
-    photoTitle.textContent = photo.title;
-    photoCaption.textContent = photo.caption;
+    // Actualizar información (AHORA DEBAJO DE LA IMAGEN)
+    document.getElementById('photoTitle').textContent = photo.title;
+    document.getElementById('photoCaption').textContent = photo.caption;
     
-    // USAR LA NUEVA FUNCIÓN OPTIMIZADA
+    // Efecto de animación en la información
+    const infoContainer = document.querySelector('.photo-info-container');
+    infoContainer.style.animation = 'none';
+    setTimeout(() => {
+        infoContainer.style.animation = 'fadeInUp 0.5s ease forwards';
+    }, 10);
+    
+    // Crear efecto de corazón MEJORADO (más corazones)
     createPhotoHeartsOptimized();
 }
 
@@ -574,3 +591,89 @@ Configura tus archivos en:
 
 ¡Feliz San Valentín! ❤️
 `);
+
+/* ===============================
+   CORAZONES SINCRONIZADOS CON MUSICA
+   =============================== */
+(function () {
+    const heartsContainer = document.getElementById("heartsContainer");
+    const audio = document.getElementById("audioPlayer");
+    if (!heartsContainer || !audio) return;
+
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AudioContext();
+    const src = ctx.createMediaElementSource(audio);
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = 256;
+
+    src.connect(analyser);
+    analyser.connect(ctx.destination);
+
+    const data = new Uint8Array(analyser.frequencyBinCount);
+
+    let lastBeat = 0;
+
+    function spawnHeart(strength = 1) {
+        const heart = document.createElement("div");
+        heart.className = "floating-heart";
+        heart.innerHTML = "❤";
+
+        const size = 14 + strength * 25;
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = size + "px";
+        heart.style.opacity = 0.5 + strength * 0.5;
+        heart.style.animationDuration = 14 - strength * 6 + "s";
+
+        heartsContainer.appendChild(heart);
+        setTimeout(() => heart.remove(), 20000);
+    }
+
+    function analyze() {
+        requestAnimationFrame(analyze);
+        analyser.getByteFrequencyData(data);
+
+        const bass = data.slice(0, 10).reduce((a, b) => a + b, 0) / 10;
+        const now = Date.now();
+
+        if (bass > 190 && now - lastBeat > 300) {
+            spawnHeart(bass / 255);
+            lastBeat = now;
+        }
+    }
+
+    audio.addEventListener("play", () => {
+        if (ctx.state === "suspended") ctx.resume();
+        analyze();
+    });
+})();
+
+
+/* ===============================
+   MEJORA SISTEMA DE FOTOS
+   - Precarga de imágenes
+   - Protección contra spam
+   =============================== */
+let photoLocked = false;
+
+function preloadPhotos() {
+    photos.forEach(p => {
+        const img = new Image();
+        img.src = p.url;
+    });
+}
+
+// Llamar al precargado al iniciar galería
+const _initGallery = initGallery;
+initGallery = function () {
+    preloadPhotos();
+    _initGallery();
+};
+
+// Bloqueo corto para evitar clics rápidos
+const _showPhoto = showPhoto;
+showPhoto = function(index, animationClass) {
+    if (photoLocked) return;
+    photoLocked = true;
+    _showPhoto(index, animationClass);
+    setTimeout(()=> photoLocked = false, 600);
+};
