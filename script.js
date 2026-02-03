@@ -42,7 +42,7 @@ const songConfig = {
         [29, "Pero es tan bueno"],
         [31, "Nunca he soñado con nadie como tú"],
         [36, "Y he oído hablar de un amor que llega una vez en la vida."],
-        [43, "Y estoy bastante seguro de que tú eres ese amor mío."],
+        [43, "Y estoy bastante seguro de que tú eres ese amor mío 💗."],
         [48, "Porque estoy en un campo de dientes de león."],
         [52, "Deseando a todos que seas mío, mío."],
         [61, "Y veo la eternidad en tus ojos"],
@@ -54,7 +54,32 @@ const songConfig = {
         [92, "Porque se hace muy difícil respirar"],
         [97, "Cuando me miras"],
         [99, "Nunca me he sentido tan viva y libre."],
-        [103, "Cuando me miras"]
+        [103, "Cuando me miras"],
+        [105, "Nunca me eh sentido tan felíz"],
+        [110, "Y eh oído hablar de un amor que llega una vez en la vida."],
+        [116, "Y estoy bastante segura de que tú eres ese amor mío 💗"],
+        [122, "Porque estoy en un campo de dientes de león."],
+        [126, "Deseando a todos que seas mío, mío."],
+        [135, "Y veo la eternidad en tus ojos"],
+        [138, "Me siento bien cuando te veo sonreír, sonreír."],
+        [146, "Deseando tener dientes de león todo el tiempo"],
+        [150, "Orando a Dios para que un día seas mío"],
+        [153, "Deseando dientes de león todo el tiempo, todo el tiempo"],
+        [160,"Diente de león, vas hacia el viento"],
+        [163, "¿No se lo harás saber a mi amor?"],
+        [166, "Diente de león, vas hacia el viento"],
+        [169, "¿No le dejarás saber a mi querido que..."],
+        [174, "Estoy en un campo de dientes de león."],
+        [177, "Deseando a todos que seas mío, mío."],
+        [186, "Y veo la eternidad en tus ojos"],
+        [189, "Me siento bien cuando te veo sonreír, sonreír."],
+        [197, "Deseando tener dientes de león todo el tiempo"],
+        [200, "Orando a Dios para que un día seas mío"],
+        [203, "Deseando dientes de león todo el tiempo, todo el tiempo"],
+        [210, "Estoy en un campo de dientes de león."],
+        [214, "Deseando a todos que seas mío, mío."],
+        [224, "Te Amo ♥️"]
+        
         
     ]
 };
@@ -63,7 +88,7 @@ const songConfig = {
 const photos = [
     {
         title: "Nuestro Primer Día",
-        caption: "El día que todo comenzó, cuando nuestros caminos se cruzaron y supe que eras especial.",
+        caption: "El día que todo comenzó, y supe que eras especial.",
         url: "assets/images/foto1.jpg"
     },
     {
@@ -73,7 +98,7 @@ const photos = [
     },
     {
         title: "Atardeceres Juntos",
-        caption: "Contemplando el ocaso, compartiendo sueños y construyendo recuerdos.",
+        caption: "Compartiendo sueños y construyendo recuerdos.",
         url: "assets/images/foto3.jpg"
     },
     {
@@ -81,12 +106,7 @@ const photos = [
         caption: "Esas miradas que dicen más que mil palabras, esos gestos que lo significan todo.",
         url: "assets/images/foto4.jpg"
     }
-    // Agrega más fotos según necesites:
-    // {
-    //     title: "Título de la foto",
-    //     caption: "Descripción personal",
-    //     url: "assets/images/foto5.jpg"
-    // }
+    // Agrega más fotos según necesites
 ];
 
 // Variables de estado
@@ -96,44 +116,224 @@ let galleryRevealed = false;
 let currentIndicator = 0;
 let lastDirection = 'next';
 
-// FUNCIONES PRINCIPALES
-// =====================
+// ============================================
+// SISTEMA MEJORADO DE CORAZONES DE FONDO
+// (Arriba hacia abajo con diferentes transparencias)
+// ============================================
 
-// Inicializar la configuración
-function initConfig() {
-    // Configurar título y artista
-    songTitle.textContent = songConfig.title;
-    songArtist.textContent = songConfig.artist;
-}
-
-// Generar corazones de fondo
-function createHearts() {
+function createFloatingHeartsSystem() {
     const container = document.getElementById('heartsContainer');
     
-    for (let i = 0; i < 25; i++) {
-        const heart = document.createElement('div');
-        heart.classList.add('heart');
-        heart.innerHTML = '<i class="fas fa-heart"></i>';
-        
-        const left = Math.random() * 100;
-        const delay = Math.random() * 20;
-        const duration = 15 + Math.random() * 15;
-        const size = 12 + Math.random() * 20;
-        
-        heart.style.left = `${left}%`;
-        heart.style.animationDelay = `${delay}s`;
-        heart.style.animationDuration = `${duration}s`;
-        heart.style.fontSize = `${size}px`;
-        
-        // Color aleatorio suave
-        const opacity = 0.08 + Math.random() * 0.12;
-        heart.style.color = `rgba(255, 64, 129, ${opacity})`;
-        
-        container.appendChild(heart);
+    // Capa 1: Corazones grandes y lentos (60% transparencia)
+    for (let i = 0; i < 10; i++) {
+        createDownwardHeart(container, 'heart-bg-down', 24, 32, 20, 0.4); // 60% visible
+    }
+    
+    // Capa 2: Corazones medianos (40% transparencia)
+    for (let i = 0; i < 15; i++) {
+        createDownwardHeart(container, 'heart-bg-down-medium', 18, 26, 25, 0.6); // 40% visible
+    }
+    
+    // Capa 3: Corazones pequeños y rápidos (20% transparencia)
+    for (let i = 0; i < 20; i++) {
+        createDownwardHeart(container, 'heart-bg-down-fast', 14, 20, 15, 0.8); // 20% visible
     }
 }
 
-// Reproducir o pausar música
+function createDownwardHeart(container, className, minSize, maxSize, baseDuration, baseOpacity) {
+    const heart = document.createElement('div');
+    heart.className = className;
+    heart.innerHTML = '<i class="fas fa-heart"></i>';
+    
+    // Posición inicial aleatoria en la parte superior
+    const leftPos = Math.random() * 100;
+    const delay = Math.random() * 30;
+    const heartDuration = baseDuration + Math.random() * 10;
+    
+    // Tamaño aleatorio
+    const size = minSize + Math.random() * (maxSize - minSize);
+    
+    // Opacidad aleatoria (más opacos que los de fondo anterior)
+    const opacity = baseOpacity + Math.random() * 0.15;
+    
+    // Colores con diferentes niveles de transparencia
+    const colors = [
+        `rgba(255, 64, 129, ${opacity})`,    // Rosa fuerte
+        `rgba(233, 30, 99, ${opacity})`,     // Rosa medio
+        `rgba(194, 24, 91, ${opacity})`,     // Rosa oscuro
+        `rgba(255, 128, 171, ${opacity})`    // Rosa claro
+    ];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    
+    heart.style.left = `${leftPos}%`;
+    heart.style.animationDelay = `${delay}s`;
+    heart.style.animationDuration = `${heartDuration}s`;
+    heart.style.fontSize = `${size}px`;
+    heart.style.color = color;
+    
+    // Rotación inicial aleatoria
+    heart.style.transform = `rotate(${Math.random() * 360}deg)`;
+    
+    container.appendChild(heart);
+}
+
+// ============================================
+// SISTEMA OPTIMIZADO DE CORAZONES PARA LETRAS
+// (Explotan a los costados sin tapar el texto)
+// ============================================
+
+function createLyricHeartsOptimized() {
+    const lyricsContainer = document.querySelector('.lyrics-container');
+    const rect = lyricsContainer.getBoundingClientRect();
+    
+    // Crear contenedor para corazones de letras si no existe
+    let heartsContainer = document.querySelector('.lyrics-hearts-container');
+    if (!heartsContainer) {
+        heartsContainer = document.createElement('div');
+        heartsContainer.className = 'lyrics-hearts-container';
+        lyricsContainer.appendChild(heartsContainer);
+    }
+    
+    // Limpiar corazones anteriores
+    heartsContainer.innerHTML = '';
+    
+    // Crear corazones que explotan desde diferentes direcciones
+    const heartCount = 4; // Menos corazones pero mejor posicionados
+    
+    for (let i = 0; i < heartCount; i++) {
+        setTimeout(() => {
+            const heartType = Math.floor(Math.random() * 4);
+            let heartClass, startPosition;
+            
+            switch(heartType) {
+                case 0: // Izquierda
+                    heartClass = 'heart-lyric-left';
+                    startPosition = {
+                        left: '10%',
+                        top: `${30 + Math.random() * 40}%`
+                    };
+                    break;
+                case 1: // Derecha
+                    heartClass = 'heart-lyric-right';
+                    startPosition = {
+                        right: '10%',
+                        top: `${30 + Math.random() * 40}%`
+                    };
+                    break;
+                case 2: // Arriba
+                    heartClass = 'heart-lyric-top';
+                    startPosition = {
+                        left: `${20 + Math.random() * 60}%`,
+                        top: '20%'
+                    };
+                    break;
+                case 3: // Abajo
+                    heartClass = 'heart-lyric-bottom';
+                    startPosition = {
+                        left: `${20 + Math.random() * 60}%`,
+                        bottom: '20%'
+                    };
+                    break;
+            }
+            
+            // Crear corazón
+            const heart = document.createElement('div');
+            heart.className = heartClass;
+            heart.innerHTML = '<i class="fas fa-heart"></i>';
+            
+            // Posicionar
+            Object.keys(startPosition).forEach(key => {
+                heart.style[key] = startPosition[key];
+            });
+            
+            // Tamaño aleatorio moderado
+            const size = 18 + Math.random() * 10;
+            heart.style.fontSize = `${size}px`;
+            
+            // Sombra para brillo
+            heart.style.textShadow = `0 0 6px currentColor`;
+            
+            // Agregar al contenedor
+            heartsContainer.appendChild(heart);
+            
+            // Remover después de la animación
+            setTimeout(() => {
+                if (heart.parentNode) {
+                    heart.parentNode.removeChild(heart);
+                }
+            }, 2000);
+            
+        }, i * 150);
+    }
+}
+
+// ============================================
+// SISTEMA OPTIMIZADO DE CORAZONES PARA FOTOS
+// ============================================
+
+function createPhotoHeartsOptimized() {
+    const rect = photoDisplay.getBoundingClientRect();
+    
+    for (let i = 0; i < 4; i++) { // Menos corazones
+        setTimeout(() => {
+            // Elegir efecto
+            const effects = ['heartbeat-effect', 'spin-effect-soft'];
+            const effect = effects[Math.floor(Math.random() * effects.length)];
+            
+            // Crear corazón
+            const heart = document.createElement('div');
+            heart.className = `heart-effect ${effect}`;
+            heart.innerHTML = '<i class="fas fa-heart"></i>';
+            
+            // Posición aleatoria alrededor de la foto (no encima)
+            const margin = 30;
+            const startX = rect.left - margin + Math.random() * (rect.width + margin * 2);
+            const startY = rect.top - margin + Math.random() * (rect.height + margin * 2);
+            
+            // Asegurar que no esté justo encima de la foto
+            const isOverPhoto = startX > rect.left && startX < rect.left + rect.width &&
+                              startY > rect.top && startY < rect.top + rect.height;
+            
+            if (isOverPhoto && Math.random() > 0.5) {
+                // Si está sobre la foto, moverlo a un borde
+                heart.style.left = `${rect.left - margin}px`;
+                heart.style.top = `${rect.top + Math.random() * rect.height}px`;
+            } else {
+                heart.style.left = `${startX}px`;
+                heart.style.top = `${startY}px`;
+            }
+            
+            // Tamaño
+            const size = 16 + Math.random() * 20;
+            heart.style.fontSize = `${size}px`;
+            
+            // Color
+            const colors = ['#ff4081', '#e91e63', '#c2185b'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            heart.style.color = color;
+            
+            // Agregar al documento
+            document.body.appendChild(heart);
+            
+            // Remover después
+            setTimeout(() => {
+                if (heart.parentNode) heart.parentNode.removeChild(heart);
+            }, 2000);
+            
+        }, i * 200);
+    }
+}
+
+// ============================================
+// FUNCIONES PRINCIPALES (MODIFICADAS)
+// ============================================
+
+function initConfig() {
+    songTitle.textContent = songConfig.title;
+    songArtist.textContent = songConfig.artist;
+    createFloatingHeartsSystem();
+}
+
 function togglePlay() {
     if (audioPlayer.paused) {
         audioPlayer.play().then(() => {
@@ -141,14 +341,12 @@ function togglePlay() {
             playIcon.classList.add('fa-pause');
             albumCircle.classList.add('playing');
             
-            // Mostrar letras si es la primera vez
             if (currentLyricIndex === -1) {
                 lyricsPlaceholder.style.display = 'none';
                 showNextLyric();
             }
         }).catch(error => {
             console.error("Error al reproducir:", error);
-            alert("No se pudo reproducir la canción. Verifica que el archivo de audio esté en la carpeta correcta.");
         });
     } else {
         audioPlayer.pause();
@@ -158,7 +356,48 @@ function togglePlay() {
     }
 }
 
-// Actualizar progreso de la canción
+function showNextLyric() {
+    const currentTime = audioPlayer.currentTime;
+    
+    let nextIndex = -1;
+    for (let i = 0; i < songConfig.lyrics.length; i++) {
+        if (songConfig.lyrics[i][0] <= currentTime && i > currentLyricIndex) {
+            nextIndex = i;
+        } else if (songConfig.lyrics[i][0] > currentTime) {
+            break;
+        }
+    }
+    
+    if (nextIndex !== -1 && nextIndex !== currentLyricIndex) {
+        currentLyricIndex = nextIndex;
+        
+        const lineElement = document.createElement('div');
+        lineElement.className = 'lyrics-line';
+        lineElement.textContent = songConfig.lyrics[nextIndex][1];
+        
+        lyricsContent.innerHTML = '';
+        lyricsContent.appendChild(lineElement);
+        
+        setTimeout(() => {
+            lineElement.classList.add('active');
+        }, 50);
+        
+        updateIndicator();
+        
+        // USAR LA NUEVA FUNCIÓN OPTIMIZADA
+        createLyricHeartsOptimized();
+    }
+}
+
+function updateIndicator() {
+    indicatorDots.forEach((dot, index) => {
+        dot.classList.remove('active');
+    });
+    
+    currentIndicator = (currentIndicator + 1) % indicatorDots.length;
+    indicatorDots[currentIndicator].classList.add('active');
+}
+
 function updateProgress() {
     const currentTime = audioPlayer.currentTime;
     const duration = audioPlayer.duration;
@@ -170,16 +409,13 @@ function updateProgress() {
     }
 }
 
-// Formatear tiempo (mm:ss)
 function formatTime(time) {
     if (isNaN(time)) return "0:00";
-    
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }
 
-// Click en barra de progreso
 function setProgress(e) {
     const width = this.clientWidth;
     const clickX = e.offsetX;
@@ -190,119 +426,24 @@ function setProgress(e) {
     }
 }
 
-// Controlar volumen
 function setVolume() {
     audioPlayer.volume = this.value;
 }
 
-// Mostrar siguiente línea de letra
-function showNextLyric() {
-    const currentTime = audioPlayer.currentTime;
-    
-    // Encontrar la línea actual
-    let nextIndex = -1;
-    for (let i = 0; i < songConfig.lyrics.length; i++) {
-        if (songConfig.lyrics[i][0] <= currentTime && i > currentLyricIndex) {
-            nextIndex = i;
-        } else if (songConfig.lyrics[i][0] > currentTime) {
-            break;
-        }
-    }
-    
-    // Mostrar nueva línea si hay una
-    if (nextIndex !== -1 && nextIndex !== currentLyricIndex) {
-        currentLyricIndex = nextIndex;
-        
-        // Crear elemento para la línea
-        const lineElement = document.createElement('div');
-        lineElement.className = 'lyrics-line';
-        lineElement.textContent = songConfig.lyrics[nextIndex][1];
-        
-        // Limpiar contenido anterior
-        lyricsContent.innerHTML = '';
-        
-        // Agregar nueva línea
-        lyricsContent.appendChild(lineElement);
-        
-        // Activar animación
-        setTimeout(() => {
-            lineElement.classList.add('active');
-        }, 50);
-        
-        // Actualizar indicador
-        updateIndicator();
-        
-        // Crear efecto de corazón
-        createLyricHeartEffect();
-    }
-}
-
-// Actualizar indicador de puntos
-function updateIndicator() {
-    indicatorDots.forEach((dot, index) => {
-        dot.classList.remove('active');
-    });
-    
-    currentIndicator = (currentIndicator + 1) % indicatorDots.length;
-    indicatorDots[currentIndicator].classList.add('active');
-}
-
-// Efecto de corazón para letras
-function createLyricHeartEffect() {
-    const heart = document.createElement('div');
-    heart.innerHTML = '<i class="fas fa-heart" style="color:#ff4081;"></i>';
-    heart.style.position = 'absolute';
-    heart.style.fontSize = '20px';
-    heart.style.zIndex = '1000';
-    heart.style.pointerEvents = 'none';
-    heart.style.opacity = '0';
-    
-    const lyricsDisplay = document.querySelector('.lyrics-display');
-    const rect = lyricsDisplay.getBoundingClientRect();
-    heart.style.left = `${rect.left + rect.width/2}px`;
-    heart.style.top = `${rect.top + rect.height/2}px`;
-    
-    document.body.appendChild(heart);
-    
-    const animation = heart.animate([
-        { 
-            transform: 'translateY(0) scale(1)', 
-            opacity: 1 
-        },
-        { 
-            transform: 'translateY(-30px) scale(1.3)', 
-            opacity: 0 
-        }
-    ], {
-        duration: 1000,
-        easing: 'ease-out'
-    });
-    
-    animation.onfinish = () => {
-        if (heart.parentNode) heart.parentNode.removeChild(heart);
-    };
-}
-
-// Mostrar galería de fotos
 function showGallery() {
     if (!galleryRevealed) {
         galleryRevealed = true;
         
-        // Cambiar texto del botón
         galleryBtn.innerHTML = `
             <div class="heart-pulse"></div>
             <i class="fas fa-heart"></i>
             <span>Nuestros Momentos Especiales</span>
         `;
         
-        // Mostrar visor de fotos con animación
         setTimeout(() => {
             photoViewer.classList.add('active');
-            
-            // Inicializar galería
             initGallery();
             
-            // Hacer scroll suave a la galería
             setTimeout(() => {
                 document.querySelector('.gallery-section').scrollIntoView({ 
                     behavior: 'smooth',
@@ -310,25 +451,16 @@ function showGallery() {
                 });
             }, 500);
             
-            // Crear efecto de confeti de corazones
-            createHeartConfetti();
         }, 300);
     }
 }
 
-// Inicializar galería
 function initGallery() {
-    // Mostrar total de fotos
     totalPhotosEl.textContent = photos.length;
-    
-    // Crear puntos de navegación
     createPhotoDots();
-    
-    // Mostrar primera foto
     showPhoto(0, 'fade-in');
 }
 
-// Crear puntos de navegación
 function createPhotoDots() {
     photoDots.innerHTML = '';
     
@@ -346,7 +478,6 @@ function createPhotoDots() {
     });
 }
 
-// Mostrar foto específica con animación
 function showPhoto(index, animationClass = 'fade-in') {
     if (index < 0 || index >= photos.length) return;
     
@@ -354,194 +485,57 @@ function showPhoto(index, animationClass = 'fade-in') {
     const direction = index > currentPhotoIndex ? 'next' : 'prev';
     lastDirection = direction;
     
-    // Actualizar índice actual
     currentPhotoIndex = index;
-    
-    // Actualizar contador
     currentPhotoEl.textContent = index + 1;
     
-    // Actualizar puntos de navegación
     document.querySelectorAll('.photo-dot').forEach((dot, i) => {
         dot.classList.toggle('active', i === index);
     });
     
-    // Determinar clase de animación si no se especifica
     if (animationClass === 'fade-in') {
         animationClass = direction === 'next' ? 'slide-left' : 'slide-right';
     }
     
-    // Crear elemento de imagen
     const img = new Image();
     img.src = photo.url;
     img.alt = photo.title;
     img.className = animationClass;
     
-    // Manejar error de carga de imagen
     img.onerror = function() {
         console.error(`No se pudo cargar la imagen: ${photo.url}`);
-        // Mostrar placeholder de error
         this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect width="400" height="300" fill="%231a1a2e"/><text x="200" y="150" font-family="Arial" font-size="20" fill="%23ff4081" text-anchor="middle">Imagen no encontrada</text></svg>';
     };
     
-    // Limpiar display y agregar nueva imagen
     photoDisplay.innerHTML = '';
     photoDisplay.appendChild(img);
     
-    // Actualizar información
     photoTitle.textContent = photo.title;
     photoCaption.textContent = photo.caption;
     
-    // Crear efecto de corazón
-    createPhotoHeartEffect();
-    
-    // Crear efecto de corazones flotantes
-    createFloatingHearts();
+    // USAR LA NUEVA FUNCIÓN OPTIMIZADA
+    createPhotoHeartsOptimized();
 }
 
-// Navegar a foto anterior
 function prevPhoto() {
     if (currentPhotoIndex > 0) {
         showPhoto(currentPhotoIndex - 1, 'slide-right');
     } else {
-        // Si es la primera, ir a la última (loop)
         showPhoto(photos.length - 1, 'slide-right');
     }
 }
 
-// Navegar a siguiente foto
 function nextPhoto() {
     if (currentPhotoIndex < photos.length - 1) {
         showPhoto(currentPhotoIndex + 1, 'slide-left');
     } else {
-        // Si es la última, ir a la primera (loop)
         showPhoto(0, 'slide-left');
     }
 }
 
-// Efecto de corazón para fotos
-function createPhotoHeartEffect() {
-    const heart = document.createElement('div');
-    heart.innerHTML = '<i class="fas fa-heart" style="color:#ff4081;"></i>';
-    heart.style.position = 'absolute';
-    heart.style.fontSize = '24px';
-    heart.style.zIndex = '1000';
-    heart.style.pointerEvents = 'none';
-    heart.style.opacity = '0';
-    
-    const rect = photoDisplay.getBoundingClientRect();
-    heart.style.left = `${rect.left + rect.width/2}px`;
-    heart.style.top = `${rect.top + rect.height/2}px`;
-    
-    document.body.appendChild(heart);
-    
-    const animation = heart.animate([
-        { 
-            transform: 'translateY(0) scale(1)', 
-            opacity: 1 
-        },
-        { 
-            transform: 'translateY(-40px) scale(1.4)', 
-            opacity: 0 
-        }
-    ], {
-        duration: 1200,
-        easing: 'ease-out'
-    });
-    
-    animation.onfinish = () => {
-        if (heart.parentNode) heart.parentNode.removeChild(heart);
-    };
-}
+// ============================================
+// EVENT LISTENERS
+// ============================================
 
-// Crear corazones flotantes alrededor de la foto
-function createFloatingHearts() {
-    for (let i = 0; i < 5; i++) {
-        setTimeout(() => {
-            const heart = document.createElement('div');
-            heart.innerHTML = '<i class="fas fa-heart" style="color:#ff4081;"></i>';
-            heart.style.position = 'absolute';
-            heart.style.fontSize = '16px';
-            heart.style.zIndex = '999';
-            heart.style.pointerEvents = 'none';
-            heart.style.opacity = '0';
-            
-            const rect = photoDisplay.getBoundingClientRect();
-            const startX = rect.left + Math.random() * rect.width;
-            const startY = rect.top + Math.random() * rect.height;
-            
-            heart.style.left = `${startX}px`;
-            heart.style.top = `${startY}px`;
-            
-            document.body.appendChild(heart);
-            
-            const animation = heart.animate([
-                { 
-                    transform: 'translate(0, 0) scale(1) rotate(0deg)', 
-                    opacity: 0.8 
-                },
-                { 
-                    transform: `translate(${Math.random() * 60 - 30}px, ${-40 - Math.random() * 30}px) scale(1.3) rotate(${180 + Math.random() * 180}deg)`, 
-                    opacity: 0 
-                }
-            ], {
-                duration: 1500,
-                easing: 'ease-out'
-            });
-            
-            animation.onfinish = () => {
-                if (heart.parentNode) heart.parentNode.removeChild(heart);
-            };
-        }, i * 200);
-    }
-}
-
-// Crear confeti de corazones al mostrar la galería
-function createHeartConfetti() {
-    for (let i = 0; i < 15; i++) {
-        setTimeout(() => {
-            const heart = document.createElement('div');
-            heart.innerHTML = '<i class="fas fa-heart"></i>';
-            heart.style.position = 'fixed';
-            heart.style.fontSize = '20px';
-            heart.style.zIndex = '1000';
-            heart.style.pointerEvents = 'none';
-            heart.style.opacity = '0';
-            
-            // Posición aleatoria en la parte superior
-            const startX = Math.random() * window.innerWidth;
-            
-            heart.style.left = `${startX}px`;
-            heart.style.top = '0px';
-            
-            // Color aleatorio rosa/rojo
-            const colors = ['#ff4081', '#e91e63', '#c2185b', '#ff80ab'];
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            heart.style.color = color;
-            
-            document.body.appendChild(heart);
-            
-            const animation = heart.animate([
-                { 
-                    transform: 'translateY(0) scale(1) rotate(0deg)', 
-                    opacity: 0.8 
-                },
-                { 
-                    transform: `translateY(${window.innerHeight}px) translateX(${Math.random() * 100 - 50}px) scale(1.2) rotate(${360 + Math.random() * 360}deg)`, 
-                    opacity: 0 
-                }
-            ], {
-                duration: 2000 + Math.random() * 1000,
-                easing: 'cubic-bezier(0.215, 0.610, 0.355, 1)'
-            });
-            
-            animation.onfinish = () => {
-                if (heart.parentNode) heart.parentNode.removeChild(heart);
-            };
-        }, i * 100);
-    }
-}
-
-// Event Listeners
 playBtn.addEventListener('click', togglePlay);
 audioPlayer.addEventListener('timeupdate', () => {
     updateProgress();
@@ -552,7 +546,6 @@ audioPlayer.addEventListener('loadedmetadata', () => {
 });
 audioPlayer.addEventListener('error', (e) => {
     console.error("Error de audio:", e);
-    alert("Error al cargar el archivo de audio. Verifica que el archivo MP3 esté en la carpeta assets/audio/");
 });
 progressContainer.addEventListener('click', setProgress);
 volumeSlider.addEventListener('input', setVolume);
@@ -560,63 +553,24 @@ galleryBtn.addEventListener('click', showGallery);
 prevPhotoBtn.addEventListener('click', prevPhoto);
 nextPhotoBtn.addEventListener('click', nextPhoto);
 
-// Navegación con teclado
-document.addEventListener('keydown', (e) => {
-    if (galleryRevealed) {
-        if (e.key === 'ArrowLeft') {
-            prevPhoto();
-        } else if (e.key === 'ArrowRight') {
-            nextPhoto();
-        }
-    }
-});
+// ============================================
+// INICIALIZACIÓN
+// ============================================
 
-// Inicializar
 initConfig();
-createHearts();
 
-// Instrucciones para el usuario
 console.log(`
-=== INSTRUCCIONES PARA USAR RECURSOS LOCALES ===
+=== WEB DE SAN VALENTÍN OPTIMIZADA ===
 
-1. ESTRUCTURA DE CARPETAS NECESARIA:
-   tu-web/
-   ├── index.html
-   ├── style.css
-   ├── script.js
-   ├── assets/
-   │   ├── audio/
-   │   │   └── nuestra-cancion.mp3
-   │   └── images/
-   │       ├── album-cover.jpg
-   │       ├── foto1.jpg
-   │       ├── foto2.jpg
-   │       └── foto3.jpg
+Características mejoradas:
+1. Corazones de fondo: Arriba → Abajo, diferentes transparencias
+2. Corazones de letras: Explotan a los costados sin tapar texto
+3. Sistema optimizado: Menos recursos, mejor rendimiento
+4. z-index controlado: Contenido siempre visible
 
-2. PASOS A SEGUIR:
-   a) Crea las carpetas 'assets/audio/' y 'assets/images/'
-   b) Coloca tu archivo MP3 en assets/audio/
-   c) Coloca tus fotos en assets/images/
-   d) Cambia los nombres en las configuraciones si es necesario
+Configura tus archivos en:
+- assets/audio/nuestra-cancion.mp3
+- assets/images/foto1.jpg, foto2.jpg, etc.
 
-3. CONFIGURAR LA CANCIÓN (en script.js):
-   - Modifica 'songConfig.title' con el nombre de tu canción
-   - Modifica 'songConfig.artist' con el nombre del artista
-   - Ajusta los tiempos en 'songConfig.lyrics' según tu canción
-
-4. CONFIGURAR LAS FOTOS (en script.js):
-   - Modifica el array 'photos' con tus imágenes
-   - Usa rutas relativas: 'assets/images/nombre-foto.jpg'
-   - Agrega títulos y descripciones personales
-
-5. FORMATOS RECOMENDADOS:
-   - Audio: MP3 (compatible con todos los navegadores)
-   - Imágenes: JPG o PNG (600-800px de ancho)
-   - Peso: Optimiza archivos para carga rápida
-
-6. PRUEBAS:
-   - Abre index.html en tu navegador
-   - Verifica que la canción se reproduzca
-   - Comprueba que las imágenes se carguen
-   - Ajusta tiempos de letras si es necesario
+¡Feliz San Valentín! ❤️
 `);
