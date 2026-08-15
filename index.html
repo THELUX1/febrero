@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Cristian Deniz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Contenedor principal tamaño A4 aproximado */
+        .cv-container {
+            background-color: #ffffff;
+            width: 800px;
+            min-height: 1050px;
+            display: flex;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        /* Columna Izquierda (Gris Claro) */
+        .left-column {
+            background-color: #f4f4f5;
+            width: 35%;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            border-right: 1px solid #e4e4e7;
+        }
+
+        /* CONTENEDOR DE LA FOTO (MARCO REDONDO) */
+        .profile-box {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .profile-img {
+            width: 160px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 50%; /* Hace que la foto sea completamente redonda */
+            border: 3px solid #4a4a4a; /* Borde gris oscuro elegante */
+            background-color: #ddd;
+            
+            /* =======================================================
+               ⚙️ CONTROLES PARA MOVER Y ENFOCAR LA FOTO A GUSTO:
+               ======================================================= */
+            object-position: center 20%; /* Ajusta el eje X (horizontal) y el eje Y (vertical) */
+            transform: scale(1.0);       /* Cambia el zoom: 1.0 es normal, 1.2 es más cerca, etc. */
+        }
+
+        /* Columna Derecha (Blanca) */
+        .right-column {
+            background-color: #ffffff;
+            width: 65%;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Encabezado Principal */
+        .header {
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            font-size: 38px;
+            font-family: 'Georgia', serif;
+            color: #333;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 400;
+        }
+
+        .header .subtitle {
+            font-size: 12px;
+            font-weight: bold;
+            color: #555;
+            margin-top: 15px;
+            border-top: 2px solid #555;
+            padding-top: 8px;
+            word-spacing: 2px;
+        }
+
+        /* Estilos de Secciones */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .section-title i {
+            background-color: #4a4a4a;
+            color: white;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .line-separator {
+            border-bottom: 1px solid #ccc;
+            margin-top: 15px;
+        }
+
+        p, li {
+            font-size: 13px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 5px;
+        }
+
+        ul li {
+            position: relative;
+            padding-left: 15px;
+            margin-bottom: 6px;
+        }
+
+        ul li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #333;
+        }
+
+        ul ul {
+            padding-left: 15px;
+            margin-top: 5px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .contact-item i {
+            color: #4a4a4a;
+            font-size: 16px;
+            margin-top: 2px;
+            width: 15px;
+            text-align: center;
+        }
+
+        .edu-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .edu-item::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 6px;
+            height: 6px;
+            background-color: #4a4a4a;
+            border-radius: 50%;
+        }
+
+        .edu-year {
+            font-weight: bold;
+            color: #333;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                background-color: #fff;
+            }
+            .cv-container {
+                box-shadow: none;
+                width: 100%;
+                height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cv-container">
+        
+        <div class="left-column">
+            
+            <div class="profile-box">
+                <img src="foto.jpg" alt="Cristian Deniz" class="profile-img">              
+            </div>
+
+            <div>
+                <div class="section-title">
+                    <i class="fa-solid fa-user"></i> CONTACTO
+                </div>
+                <div class="contact-item">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <p>22 de septiembre calle 43 entre 74</p>
+                </div>
+                <div class="contact-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <p>11 62564039 (solo whatsapp)<br>2966766571 (Llamadas)</p>
+                </div>
+                <div class="contact-item">
+                    <i class="fa-solid fa-envelope"></i>
+                    <p>cristiandeniz669@gmail.com</p>
+                </div>
+                <div class="line-separator"></div>
+            </div>
+
+            <div>
+                <div class="section-title">
+                    <i class="fa-solid fa-star"></i> HABILIDADES
+                </div>
+                <ul>
+                    <li>Responsable</li>
+                    <li>Capacidad de adaptación</li>
+                    <li>Buena comunicación</li>
+                    <li>Pro activo</li>
+                    <li>Trabajo en equipo</li>
+                </ul>
+                <div class="line-separator"></div>
+            </div>
+
+            <div>
+                <div class="section-title">
+                    <i class="fa-solid fa-user-gear"></i> INFORMACIÓN PERSONAL
+                </div>
+                <p><strong>Fecha de nacimiento:</strong><br>09/12/2003</p>
+            </div>
+
+        </div>
+
+        <div class="right-column">
+            
+            <div class="header">
+                <h1>Cristian Deniz</h1>
+                <div class="subtitle">ATENCIÓN AL PÚBLICO | CAJERO | REPOSITOR | AYUDANTE</div>
+            </div>
+
+            <div>
+                <div class="section-title">
+                    <i class="fa-solid fa-bullseye"></i> Descripción
+                </div>
+                <p>Responsable y orientado a tareas prácticas, con experiencia en logística, atención al público, cocina, electricidad y plomería como ayudante. Cuento con conocimientos en reparación y mantenimiento de electrodomésticos, muebles, herramientas, bicicletas y distintos elementos del hogar. También tengo experiencia como voluntario en el Ejército Argentino. Me adapto con facilidad, aprendo rápido y tengo disposición para asumir nuevos desafíos.</p>
+                <div class="line-separator"></div>
+            </div>
+
+            <div>
+                <div class="section-title">
+                    <i class="fa-solid fa-briefcase"></i> EXPERIENCIA LABORAL
+                </div>
+                <ul>
+                    <li><strong>Ejercito Argentino:</strong> soldado voluntario (experiencia comprobable)</li>
+                    <li><strong>Plaza logística:</strong> auxiliar operativo (experiencia comprobable)</li>
+                    <li><strong>Otros:</strong>
+                        <ul>
+                            <li>Plomería</li>
+                            <li>Ayudante electricista</li>
+                            <li>Ayudante de cocina</li>
+                            <li>Ayudante de albañil</li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="line-separator"></div>
+            </div>
+
+            <div>
+                <div class="section-title">
+                    <i class="fa-solid fa-graduation-cap"></i> EDUCACIÓN
+                </div>
+                <div class="edu-item">
+                    <p>Primario completo</p>
+                    <span class="edu-year">2016</span>
+                </div>
+                <div class="edu-item">
+                    <p>Secundario completo<br><span style="color:#666;">Bachiller en comunicación</span></p>
+                    <span class="edu-year">2022</span>
+                </div>
+                <div class="line-separator"></div>
+            </div>
+
+            <div>
+                <div class="section-title">
+                    <i class="fa-solid fa-clock"></i> DISPONIBILIDAD HORARIA
+                </div>
+                <p>Tiempo completo</p>
+                <div class="line-separator"></div>
+            </div>
+
+            <div>
+                <div class="section-title">
+                    <i class="fa-solid fa-check"></i> CUENTO CON
+                </div>
+                <ul>
+                    <li>Libreta sanitaria</li>
+                    <li>Curso en manipulación de alimentos</li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
